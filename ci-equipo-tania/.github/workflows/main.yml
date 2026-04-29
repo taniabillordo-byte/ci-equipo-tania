@@ -1,0 +1,28 @@
+name: .NET CI
+
+on:
+  push:
+    branches: [ "main", "doc-instrucciones" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restaurar dependencias
+      run: dotnet restore src/
+
+    - name: Compilar (Build)
+      run: dotnet build src/ --no-restore
+
+    - name: Ejecutar Tests
+      run: dotnet test src/ --no-build --verbosity normal
